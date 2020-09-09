@@ -1,14 +1,8 @@
-# Python ST7789
+# Python GC9A01
 
-[![Build Status](https://travis-ci.com/pimoroni/st7789-python.svg?branch=master)](https://travis-ci.com/pimoroni/st7789-python)
-[![Coverage Status](https://coveralls.io/repos/github/pimoroni/st7789-python/badge.svg?branch=master)](https://coveralls.io/github/pimoroni/st7789-python?branch=master)
-[![PyPi Package](https://img.shields.io/pypi/v/st7789.svg)](https://pypi.python.org/pypi/st7789)
-[![Python Versions](https://img.shields.io/pypi/pyversions/st7789.svg)](https://pypi.python.org/pypi/st7789)
+Python library to control an GC9A01 TFT LCD display
 
-
-Python library to control an ST7789 TFT LCD display
-
-Designed specifically to work with a ST7789 based 240x240 pixel TFT SPI display. (Specifically the 1.3" SPI LCD from Pimoroni).
+Designed specifically to work with a GC9A01 based 240x240 pixel TFT SPI display. 
 
 Make sure you have the following dependencies:
 
@@ -20,7 +14,8 @@ sudo apt-get install python-rpi.gpio python-spidev python-pip python-pil python-
 Install this library by running:
 
 ````
-sudo pip install st7789
+cd gc9a01-python/library
+sudo pip install -e .
 ````
 
 See example of usage in the examples folder.
@@ -30,7 +25,9 @@ See example of usage in the examples folder.
 
 This library is a modification of a modification of code originally written by Tony DiCola for Adafruit Industries, and modified to work with the ST7735 by Clement Skau.
 
-To create this ST7789 driver, it has been hard-forked from st7735-python which was originally modified by Pimoroni to include support for their 160x80 SPI LCD breakout.
+To create an ST7789 driver, it has been hard-forked from st7735-python which was originally modified by Pimoroni to include support for their 160x80 SPI LCD breakout.
+
+Finally, this was forked from Pimoroni's fork to support the GC9A01 controller instead.
 
 ## Modifications include:
 

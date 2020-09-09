@@ -33,70 +33,22 @@ BG_SPI_CS_FRONT = 1
 
 SPI_CLOCK_HZ = 16000000
 
-ST7789_NOP = 0x00
-ST7789_SWRESET = 0x01
-ST7789_RDDID = 0x04
-ST7789_RDDST = 0x09
+# TODO: Complete this table
+GC9A01_SLEEP_OUT = 0x11
+GC9A01_DISPLAY_ON = 0x29
+GC9A01_TEARING_EFFECT_LINE_ON = 0x35
+GC9A01_MEMORY_ACCESS_CONTROL = 0x36
+GC9A01_PIXEL_FORMAT_SET = 0x3A
+GC9A01_DISPLAY_INVERSION_ON = 0x21
 
-ST7789_SLPIN = 0x10
-ST7789_SLPOUT = 0x11
-ST7789_PTLON = 0x12
-ST7789_NORON = 0x13
-
-# ILI9341_RDMODE = 0x0A
-# ILI9341_RDMADCTL = 0x0B
-# ILI9341_RDPIXFMT = 0x0C
-# ILI9341_RDIMGFMT = 0x0A
-# ILI9341_RDSELFDIAG = 0x0F
-
-ST7789_INVOFF = 0x20
-ST7789_INVON = 0x21
-# ILI9341_GAMMASET = 0x26
-ST7789_DISPOFF = 0x28
-ST7789_DISPON = 0x29
-
+# These are compatible with GC9A01
 ST7789_CASET = 0x2A
 ST7789_RASET = 0x2B
 ST7789_RAMWR = 0x2C
 ST7789_RAMRD = 0x2E
 
-ST7789_PTLAR = 0x30
-ST7789_MADCTL = 0x36
-ST7789_COLMOD = 0x3A
-
-ST7789_FRMCTR1 = 0xB1
-ST7789_FRMCTR2 = 0xB2
-ST7789_FRMCTR3 = 0xB3
-ST7789_INVCTR = 0xB4
-# ILI9341_DFUNCTR = 0xB6
-ST7789_DISSET5 = 0xB6
-
-ST7789_GCTRL = 0xB7
-ST7789_GTADJ = 0xB8
-ST7789_VCOMS = 0xBB
-
-ST7789_LCMCTRL = 0xC0
-ST7789_IDSET = 0xC1
-ST7789_VDVVRHEN = 0xC2
-ST7789_VRHS = 0xC3
-ST7789_VDVS = 0xC4
-ST7789_VMCTR1 = 0xC5
-ST7789_FRCTRL2 = 0xC6
-ST7789_CABCCTRL = 0xC7
-
-ST7789_RDID1 = 0xDA
-ST7789_RDID2 = 0xDB
-ST7789_RDID3 = 0xDC
-ST7789_RDID4 = 0xDD
-
-ST7789_GMCTRP1 = 0xE0
-ST7789_GMCTRN1 = 0xE1
-
-ST7789_PWCTR6 = 0xFC
-
-
-class ST7789(object):
-    """Representation of an ST7789 TFT LCD."""
+class GC9A01(object):
+    """Representation of an GC9A01 TFT LCD."""
 
     def __init__(self, port, cs, dc, backlight=None, rst=None, width=240,
                  height=240, rotation=90, invert=True, spi_speed_hz=4000000):
@@ -109,10 +61,10 @@ class ST7789(object):
         :param port: SPI port number
         :param cs: SPI chip-select number (0 or 1 for BCM
         :param backlight: Pin for controlling backlight
-        :param rst: Reset pin for ST7789
-        :param width: Width of display connected to ST7789
-        :param height: Height of display connected to ST7789
-        :param rotation: Rotation of display connected to ST7789
+        :param rst: Reset pin for GC9A01
+        :param width: Width of display connected to GC9A01
+        :param height: Height of display connected to GC9A01
+        :param rotation: Rotation of display connected to GC9A01
         :param invert: Invert display
         :param spi_speed_hz: SPI speed (in Hz)
 
@@ -202,90 +154,248 @@ class ST7789(object):
             time.sleep(0.500)
 
     def _init(self):
-        # Initialize the display.
+        # Initialize the display using the example sequence from sample code found at:
+        # https://www.buydisplay.com/1-28-inch-tft-ips-lcd-display-module-240x240-spi-for-arduino-raspberry-pi 
+        self.command(0xEF)
+     
+        self.command(0xEB)
+        self.data(0x14) 
+        
+        self.command(0xFE)             
+        self.command(0xEF) 
 
-        self.command(ST7789_SWRESET)    # Software reset
-        time.sleep(0.150)               # delay 150 ms
+        self.command(0xEB)    
+        self.data(0x14) 
 
-        self.command(ST7789_MADCTL)
-        self.data(0x70)
+        self.command(0x84)            
+        self.data(0x40) 
 
-        self.command(ST7789_FRMCTR2)    # Frame rate ctrl - idle mode
-        self.data(0x0C)
-        self.data(0x0C)
-        self.data(0x00)
-        self.data(0x33)
-        self.data(0x33)
+        self.command(0x85)            
+        self.data(0xFF) 
 
-        self.command(ST7789_COLMOD)
-        self.data(0x05)
+        self.command(0x86)            
+        self.data(0xFF) 
 
-        self.command(ST7789_GCTRL)
-        self.data(0x14)
+        self.command(0x87)            
+        self.data(0xFF)
 
-        self.command(ST7789_VCOMS)
-        self.data(0x37)
+        self.command(0x88)            
+        self.data(0x0A)
 
-        self.command(ST7789_LCMCTRL)    # Power control
-        self.data(0x2C)
+        self.command(0x89)            
+        self.data(0x21) 
 
-        self.command(ST7789_VDVVRHEN)   # Power control
+        self.command(0x8A)            
+        self.data(0x00) 
+
+        self.command(0x8B)            
+        self.data(0x80) 
+
+        self.command(0x8C)            
+        self.data(0x01) 
+
+        self.command(0x8D)            
+        self.data(0x01) 
+
+        self.command(0x8E)            
+        self.data(0xFF) 
+
+        self.command(0x8F)            
+        self.data(0xFF) 
+
+        self.command(0xB6)
+        self.data(0x00)           
+        self.data(0x00) 
+        
+        # TODO: Set up rotation/mirroring correctly here
+        USE_HORIZONTAL = 0
+        mac_config = [0x18, 0x28, 0x48, 0x88]
+        
+        self.command(GC9A01_MEMORY_ACCESS_CONTROL)
+        self.data(mac_config[USE_HORIZONTAL])
+
+        self.command(GC9A01_PIXEL_FORMAT_SET)            
+        self.data(0x05) 
+
+        self.command(0x90)            
+        self.data(0x08)
+        self.data(0x08)
+        self.data(0x08)
+        self.data(0x08) 
+
+        self.command(0xBD)            
+        self.data(0x06)
+        
+        self.command(0xBC)            
+        self.data(0x00)   
+
+        self.command(0xFF)            
+        self.data(0x60)
         self.data(0x01)
-
-        self.command(ST7789_VRHS)       # Power control
-        self.data(0x12)
-
-        self.command(ST7789_VDVS)       # Power control
-        self.data(0x20)
-
-        self.command(0xD0)
-        self.data(0xA4)
-        self.data(0xA1)
-
-        self.command(ST7789_FRCTRL2)
-        self.data(0x0F)
-
-        self.command(ST7789_GMCTRP1)    # Set Gamma
-        self.data(0xD0)
         self.data(0x04)
-        self.data(0x0D)
-        self.data(0x11)
+
+        self.command(0xC3)            
         self.data(0x13)
-        self.data(0x2B)
-        self.data(0x3F)
-        self.data(0x54)
-        self.data(0x4C)
+        self.command(0xC4)            
+        self.data(0x13)
+
+        self.command(0xC9)            
+        self.data(0x22)
+
+        self.command(0xBE)            
+        self.data(0x11) 
+
+        self.command(0xE1)            
+        self.data(0x10)
+        self.data(0x0E)
+
+        self.command(0xDF)            
+        self.data(0x21)
+        self.data(0x0c)
+        self.data(0x02)
+
+        self.command(0xF0)   
+        self.data(0x45)
+        self.data(0x09)
+        self.data(0x08)
+        self.data(0x08)
+        self.data(0x26)
+        self.data(0x2A)
+
+        self.command(0xF1)    
+        self.data(0x43)
+        self.data(0x70)
+        self.data(0x72)
+        self.data(0x36)
+        self.data(0x37)  
+        self.data(0x6F)
+
+        self.command(0xF2)   
+        self.data(0x45)
+        self.data(0x09)
+        self.data(0x08)
+        self.data(0x08)
+        self.data(0x26)
+        self.data(0x2A)
+
+        self.command(0xF3)   
+        self.data(0x43)
+        self.data(0x70)
+        self.data(0x72)
+        self.data(0x36)
+        self.data(0x37) 
+        self.data(0x6F)
+
+        self.command(0xED)    
+        self.data(0x1B) 
+        self.data(0x0B) 
+
+        self.command(0xAE)            
+        self.data(0x77)
+        
+        self.command(0xCD)            
+        self.data(0x63)       
+
+        self.command(0x70)            
+        self.data(0x07)
+        self.data(0x07)
+        self.data(0x04)
+        self.data(0x0E) 
+        self.data(0x0F) 
+        self.data(0x09)
+        self.data(0x07)
+        self.data(0x08)
+        self.data(0x03)
+
+        self.command(0xE8)            
+        self.data(0x34)
+
+        self.command(0x62)            
         self.data(0x18)
         self.data(0x0D)
-        self.data(0x0B)
-        self.data(0x1F)
-        self.data(0x23)
+        self.data(0x71)
+        self.data(0xED)
+        self.data(0x70) 
+        self.data(0x70)
+        self.data(0x18)
+        self.data(0x0F)
+        self.data(0x71)
+        self.data(0xEF)
+        self.data(0x70) 
+        self.data(0x70)
 
-        self.command(ST7789_GMCTRN1)    # Set Gamma
-        self.data(0xD0)
-        self.data(0x04)
-        self.data(0x0C)
+        self.command(0x63)            
+        self.data(0x18)
         self.data(0x11)
+        self.data(0x71)
+        self.data(0xF1)
+        self.data(0x70) 
+        self.data(0x70)
+        self.data(0x18)
         self.data(0x13)
-        self.data(0x2C)
-        self.data(0x3F)
-        self.data(0x44)
-        self.data(0x51)
-        self.data(0x2F)
-        self.data(0x1F)
-        self.data(0x1F)
-        self.data(0x20)
-        self.data(0x23)
+        self.data(0x71)
+        self.data(0xF3)
+        self.data(0x70) 
+        self.data(0x70)
 
-        if self._invert:
-            self.command(ST7789_INVON)   # Invert display
-        else:
-            self.command(ST7789_INVOFF)  # Don't invert display
+        self.command(0x64)            
+        self.data(0x28)
+        self.data(0x29)
+        self.data(0xF1)
+        self.data(0x01)
+        self.data(0xF1)
+        self.data(0x00)
+        self.data(0x07)
 
-        self.command(ST7789_SLPOUT)
+        self.command(0x66)            
+        self.data(0x3C)
+        self.data(0x00)
+        self.data(0xCD)
+        self.data(0x67)
+        self.data(0x45)
+        self.data(0x45)
+        self.data(0x10)
+        self.data(0x00)
+        self.data(0x00)
+        self.data(0x00)
 
-        self.command(ST7789_DISPON)     # Display on
-        time.sleep(0.100)               # 100 ms
+        self.command(0x67)            
+        self.data(0x00)
+        self.data(0x3C)
+        self.data(0x00)
+        self.data(0x00)
+        self.data(0x00)
+        self.data(0x01)
+        self.data(0x54)
+        self.data(0x10)
+        self.data(0x32)
+        self.data(0x98)
+
+        self.command(0x74)            
+        self.data(0x10)   
+        self.data(0x85)   
+        self.data(0x80)
+        self.data(0x00) 
+        self.data(0x00) 
+        self.data(0x4E)
+        self.data(0x00)                   
+        
+        self.command(0x98)            
+        self.data(0x3e)
+        self.data(0x07)
+
+        self.command(GC9A01_TEARING_EFFECT_LINE_ON)  
+
+        self.command(GC9A01_DISPLAY_INVERSION_ON)
+
+        self.command(GC9A01_SLEEP_OUT)
+        time.sleep(0.120)
+        
+        self.command(GC9A01_DISPLAY_ON)
+        time.sleep(0.020)
+
+
+
 
     def begin(self):
         """Set up the display
