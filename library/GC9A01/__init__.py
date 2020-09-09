@@ -390,7 +390,7 @@ class GC9A01(object):
 
         self.command(GC9A01_SLEEP_OUT)
         time.sleep(0.120)
-        
+
         self.command(GC9A01_DISPLAY_ON)
         time.sleep(0.020)
 

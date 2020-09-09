@@ -21,7 +21,7 @@
 import sys
 
 from PIL import Image
-import ST7789 as ST7789
+import GC9A01 as GC9A01
 
 print("""
 image.py - Display an image on the LCD.
@@ -36,11 +36,12 @@ if len(sys.argv) < 2:
 
 image_file = sys.argv[1]
 
-# Create ST7789 LCD display class.
-disp = ST7789.ST7789(
+# Create GC9A01 LCD display class.
+disp = GC9A01.GC9A01(
     port=0,
-    cs=ST7789.BG_SPI_CS_FRONT,  # BG_SPI_CSB_BACK or BG_SPI_CS_FRONT
+    cs=GC9A01.BG_SPI_CS_BACK,  # BG_SPI_CSB_BACK or BG_SPI_CS_FRONT
     dc=9,
+    rst=24,
     backlight=19,               # 18 for back BG slot, 19 for front BG slot.
     spi_speed_hz=80 * 1000 * 1000
 )
