@@ -23,6 +23,12 @@ Install this library by running:
 sudo pip install st7789
 ````
 
+You also need to enable the SPI interface using
+
+```
+sudo raspi-config
+```
+
 See example of usage in the examples folder.
 
 
